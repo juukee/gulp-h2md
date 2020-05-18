@@ -1,0 +1,43 @@
+{
+  "name": "gulp-h2md",
+  "version": "1.0.0",
+  "description": "Gulp plugin for html to md",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha test"
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juukee/gulp-h2md.git"
+  },
+  "keywords": [
+    "gulpplugin",
+    "gulp",
+    "html2md",
+    "html-to-md",
+    "gulp-html2md",
+    "gulp-h2md"
+  ],
+  "author": "Juukee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/juukee/gulp-h2md/issues"
+  },
+  "homepage": "https://github.com/juukee/gulp-h2md#readme",
+  "dependencies": {
+    "chalk": "^4.0.0",
+    "html-to-md": "^0.3.4",
+    "lodash": "^4.17.15",
+    "plugin-error": "^1.0.1",
+    "replace-ext": "^2.0.0",
+    "strip-ansi": "^6.0.0",
+    "through2": "^3.0.1"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "mocha": "^7.1.2"
+  }
+}
