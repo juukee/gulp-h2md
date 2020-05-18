@@ -6,7 +6,7 @@ const through = require('through2');
 const clonedeep = require('lodash/cloneDeep');
 const path = require('path');
 const html2md = require('html-to-md');
-
+const log = require('fancy-log');
 
 const PLUGIN_NAME = 'gulp-h2md';
 
@@ -14,21 +14,32 @@ const PLUGIN_NAME = 'gulp-h2md';
 // Main Gulp H2md function
 //////////////////////////////
 const gulpH2md = (options, sync) => through.obj((file, enc, cb) => { // eslint-disable-line consistent-return
+
+    const validExtensions = ['.html', '.htm'];
+
     if (file.isNull()) {
-        return cb(null, file);
+        log(`${PLUGIN_NAME}: ${chalk.red('File length is null')} ${chalk.blue(file.relative)}`);
+        return cb();
     }
 
     if (file.isStream()) {
-        return cb(new PluginError(PLUGIN_NAME, 'Streaming not supported'));
+        log(`${PLUGIN_NAME}: ${chalk.red('Steam file is unsupported ')} ${chalk.blue(file.relative)}`);
+        return cb();
     }
 
     if (path.basename(file.path).indexOf('_') === 0) {
+        log(`${PLUGIN_NAME}: ${chalk.red('File length is 0 bytes')} ${chalk.blue(file.relative)}`);
         return cb();
     }
 
     if (!file.contents.length) {
         file.path = replaceExtension(file.path, '.md'); // eslint-disable-line no-param-reassign
-        return cb(null, file);
+        log(`${PLUGIN_NAME}: ${chalk.red('File length is 0 bytes')} ${chalk.blue(file.relative)}`);
+        return cb();
+    }
+    if (!validExtensions.includes(path.extname(file.path).toLowerCase())) {
+        log(`${PLUGIN_NAME}: ${chalk.red('Skipping unsupported html file')} ${chalk.blue(file.relative)}`);
+        return cb();
     }
 
     const opts = clonedeep(options || {});
@@ -37,22 +48,7 @@ const gulpH2md = (options, sync) => through.obj((file, enc, cb) => { // eslint-d
     // we set the file path here so that libhtml can correctly resolve import paths
     opts.file = file.path;
 
-    // Ensure `indentedSyntax` is true if a `.html` file
-    if (path.extname(file.path) === 'html') {
-        opts.indentedSyntax = true;
-    }
-
-    // Ensure file's parent directory in the include path
-    if (opts.includePaths) {
-        if (typeof opts.includePaths === 'string') {
-            opts.includePaths = [opts.includePaths];
-        }
-    } else {
-        opts.includePaths = [];
-    }
-
-    opts.includePaths.unshift(path.dirname(file.path));
-
+    
     //////////////////////////////
     // Handles error message
     //////////////////////////////
@@ -68,34 +64,52 @@ const gulpH2md = (options, sync) => through.obj((file, enc, cb) => { // eslint-d
 
         return cb(new PluginError(PLUGIN_NAME, error));
     };
-
+    
     if (sync !== true) {
         //////////////////////////////
         // Async H2md render
         //////////////////////////////
         const callback = (error, obj) => { // eslint-disable-line consistent-return
             if (error) {
-                return errorM(error);
+              return errorM(error);
             }
-            filePush(obj);
-        };
+            return cb(null,obj);
+          };
 
-        gulpH2md.compiler.render(opts, callback);
+        (async () => {
+            try {
+                const data = await html2md(file.contents.toString(enc), opts);
+                file.contents = Buffer.from(data);
+                file.path = replaceExtension(file.path, '.md'); 
+                log(`${PLUGIN_NAME}:`, chalk.green('✔ ') + file.relative + chalk.green(' Async Converted!'));
+                callback(null, file);
+            } catch (error) {
+                callback(new PluginError(PLUGIN_NAME, error, { fileName: file.path }));
+                log(`${PLUGIN_NAME}:`, chalk.yellow('X ') + file.relative + chalk.red(`Async Failed!`));
+                return cb();
+            }
+        })();
+
+
     } else {
         //////////////////////////////
         // Sync H2md render
         //////////////////////////////
         try {
-            filePush(gulpH2md.compiler.renderSync(opts));
+            const data = html2md(file.contents.toString(enc), opts);
+            file.contents = Buffer.from(data);
+            file.path = replaceExtension(file.path, '.md'); 
+            callback(null, file);
+            log(`${PLUGIN_NAME}:`, chalk.green('✔ ') + file.relative + chalk.gray(`Sync Converted!`));
         } catch (error) {
-            return errorM(error);
+            callback(new PluginError(PLUGIN_NAME, error, { fileName: file.path }));
+                log(`${PLUGIN_NAME}:`, chalk.yellow('X ') + file.relative + chalk.red(`Async Failed!`));
+                return cb();
         }
     }
 });
 
-//////////////////////////////
-// Sync Sass render
-//////////////////////////////
+
 gulpH2md.sync = options => gulpH2md(options, true);
 
 //////////////////////////////
@@ -107,9 +121,6 @@ gulpH2md.logError = function logError(error) {
     this.emit('end');
 };
 
-//////////////////////////////
-// Store compiler in a prop
-//////////////////////////////
-gulpH2md.compiler = require('html-to-md');
+
 
 module.exports = gulpH2md;
