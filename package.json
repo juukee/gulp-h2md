@@ -1,6 +1,6 @@
 {
   "name": "gulp-h2md",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Gulp plugin for html to md",
   "main": "index.js",
   "scripts": {
@@ -29,7 +29,7 @@
   "homepage": "https://github.com/juukee/gulp-h2md#readme",
   "dependencies": {
     "chalk": "^4.0.0",
-    "html-to-md": "^0.3.4",
+    "html-to-md": "^0.3.5",
     "lodash": "^4.17.15",
     "plugin-error": "^1.0.1",
     "replace-ext": "^2.0.0",
