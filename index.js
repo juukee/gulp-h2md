@@ -12,7 +12,7 @@ const gulpH2md = (options, sync) => through.obj(async (file, enc, cb) => { // es
     const validExtensions = ['.html', '.htm'];
 
 
-    if (file.isNull()){
+    if (file.isNull()) {
         log(`${PLUGIN_NAME}: ${chalk.red('File length is null')} ${chalk.blue(file.relative)}`);
         return cb();
     }
@@ -25,7 +25,7 @@ const gulpH2md = (options, sync) => through.obj(async (file, enc, cb) => { // es
         log(`${PLUGIN_NAME}: ${chalk.red('File length is 0 bytes')} ${chalk.blue(file.relative)}`);
         return cb();
     }
-    if (!file.contents.length){
+    if (!file.contents.length) {
         log(`${PLUGIN_NAME}: ${chalk.red('File length is 0 bytes')} ${chalk.blue(file.relative)}`);
         return cb();
     }
@@ -33,20 +33,20 @@ const gulpH2md = (options, sync) => through.obj(async (file, enc, cb) => { // es
         log(`${PLUGIN_NAME}: ${chalk.red('Skipping unsupported html file')} ${chalk.blue(file.relative)}`);
         return cb();
     }
-    
-   
+
+
     if (sync !== true) {
         (async () => {
             try {
                 const data = await new TurndownService().turndown(file.contents.toString(), opts);
                 file.contents = Buffer.allocUnsafe && Buffer.from(data) ? Buffer.from(data) : new Buffer(data);
-                file.path = replaceExtension(file.path, '.md'); 
-               
+                file.path = replaceExtension(file.path, '.md');
+
                 log(`${PLUGIN_NAME}:`, chalk.green('✔ ') + file.relative + chalk.blue(` Async Converted!`));
             } catch (error) {
                 cb(new PluginError(PLUGIN_NAME, error, { fileName: file.path }));
-                    log(`${PLUGIN_NAME}:`, chalk.yellow('X ') + file.relative + chalk.red(`Async Failed!`));
-                    return cb();
+                log(`${PLUGIN_NAME}:`, chalk.yellow('X ') + file.relative + chalk.red(`Async Failed!`));
+                return cb();
             }
         })();
 
@@ -55,13 +55,13 @@ const gulpH2md = (options, sync) => through.obj(async (file, enc, cb) => { // es
         try {
             const data = new TurndownService().turndown(file.contents.toString(), opts);
             file.contents = Buffer.allocUnsafe && Buffer.from(data) ? Buffer.from(data) : new Buffer(data);
-            file.path = replaceExtension(file.path, '.md'); 
+            file.path = replaceExtension(file.path, '.md');
             cb(null, file);
             log(`${PLUGIN_NAME}:`, chalk.green('✔ ') + file.relative + chalk.blue(` Sync Converted!`));
         } catch (error) {
             cb(new PluginError(PLUGIN_NAME, error, { fileName: file.path }));
-                log(`${PLUGIN_NAME}:`, chalk.yellow('X ') + file.relative + chalk.red(` Sync Failed!`));
-                return cb();
+            log(`${PLUGIN_NAME}:`, chalk.yellow('X ') + file.relative + chalk.red(` Sync Failed!`));
+            return cb();
         }
     }
 });

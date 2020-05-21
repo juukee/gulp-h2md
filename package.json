@@ -1,10 +1,10 @@
 {
   "name": "gulp-h2md",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Gulp plugin for html to md",
   "main": "index.js",
   "scripts": {
-    "test": "ava --verbose"
+    "test": "./node_modules/.bin/mocha test"
   },
   "engines": {
     "node": ">=8"
@@ -36,6 +36,15 @@
     "turndown": "^6.0.0"
   },
   "devDependencies": {
-    "ava": "^3.8.2"
+    "mocha": "^7.1.2",
+    "vinyl": "^2.2.0"
+  },
+  "peerDependencies": {
+    "gulp": ">=4"
+  },
+  "peerDependenciesMeta": {
+    "gulp": {
+      "optional": true
+    }
   }
 }
