@@ -4,7 +4,7 @@
   "description": "Gulp plugin for html to md",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha test"
+    "test": "ava --verbose"
   },
   "engines": {
     "node": ">=8"
@@ -36,7 +36,6 @@
     "turndown": "^6.0.0"
   },
   "devDependencies": {
-    "ava": "^3.8.2",
-    "gulp": "^4.0.2"
+    "ava": "^3.8.2"
   }
 }
