@@ -7,8 +7,8 @@ Gulp plugin for html to md
 [![codecov](https://codecov.io/gh/juukee/gulp-h2md/branch/master/graph/badge.svg)](https://codecov.io/gh/juukee/gulp-h2md)
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/gulp-h2md)
 ![David](https://img.shields.io/david/juukee/gulp-h2md)
-![Gh Publish](https://github.com/juukee/gulp-h2md/workflows/Gh Publish/badge.svg)
-![Npm Publish](https://github.com/juukee/gulp-h2md/workflows/Npm Publish/badge.svg)
+![Publish Package](https://github.com/juukee/gulp-h2md/workflows/Publish%20Package/badge.svg)
+
 # Install
 
 ```
