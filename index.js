@@ -10,25 +10,7 @@ const PLUGIN_NAME = 'gulp-h2md';
 const gulpH2md = (options, sync) => through.obj(async (file, enc, cb) => { // eslint-disable-line consistent-return
     let opts = Object.assign({}, options || {});
     const validExtensions = ['.html', '.htm'];
-    const errorM = (error) => {
-        const filePath = (error.file === 'stdin' ? file.path : error.file) || file.path;
-        const relativePath = path.relative(process.cwd(), filePath);
-        const message = [chalk.underline(relativePath), error.formatted].join('\n');
-        error.messageFormatted = message; // eslint-disable-line no-param-reassign
-        error.messageOriginal = error.message; // eslint-disable-line no-param-reassign
-        error.message = stripAnsi(message); // eslint-disable-line no-param-reassign
-        error.relativePath = relativePath; // eslint-disable-line no-param-reassign
-        return cb(new PluginError(PLUGIN_NAME, error));
-    };
 
-    function logM(msg,status='error') {
-        if(status=='error'){
-            log(`${PLUGIN_NAME}: ${chalk.red(msg)} ${chalk.blue(file.relative)}`);
-            exit();
-        }else{
-            log(`${PLUGIN_NAME}: ${chalk.green(msg)} ${chalk.blue(file.relative)}`);
-        }
-    }
 
     if (file.isNull()){
         log(`${PLUGIN_NAME}: ${chalk.red('File length is null')} ${chalk.blue(file.relative)}`);
@@ -56,7 +38,7 @@ const gulpH2md = (options, sync) => through.obj(async (file, enc, cb) => { // es
     if (sync !== true) {
         (async () => {
             try {
-                const data = await new TurndownService().turndown(file.contents.toString(), options);
+                const data = await new TurndownService().turndown(file.contents.toString(), opts);
                 file.contents = Buffer.allocUnsafe && Buffer.from(data) ? Buffer.from(data) : new Buffer(data);
                 file.path = replaceExtension(file.path, '.md'); 
                
@@ -71,7 +53,7 @@ const gulpH2md = (options, sync) => through.obj(async (file, enc, cb) => { // es
 
     } else {
         try {
-            const data = new TurndownService().turndown(file.contents.toString(), options);
+            const data = new TurndownService().turndown(file.contents.toString(), opts);
             file.contents = Buffer.allocUnsafe && Buffer.from(data) ? Buffer.from(data) : new Buffer(data);
             file.path = replaceExtension(file.path, '.md'); 
             cb(null, file);
