@@ -1,0 +1,6 @@
+name: Publish
+author: Juukee
+description: Action Demo
+outputs:
+  version:
+    run: grep -o '[0-9]*\.[0-9]*\.[0-9]*' -m 1 package.json
