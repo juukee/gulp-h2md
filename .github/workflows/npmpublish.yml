@@ -27,6 +27,7 @@ jobs:
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
+      - run: npm config set registry http://registry.npmjs.org
       - run: npm ci
       - run: npm publish --access=public
         env:
@@ -41,6 +42,7 @@ jobs:
         with:
           node-version: 12
           registry-url: https://npm.pkg.github.com/
+      - run: npm config set registry https://npm.pkg.github.com
       - run: npm ci
       - run: npm publish --access=public
         env:

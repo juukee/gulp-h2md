@@ -1,6 +1,6 @@
 {
   "name": "gulp-h2md",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Gulp plugin for html to md",
   "main": "index.js",
   "scripts": {

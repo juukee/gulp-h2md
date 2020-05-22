@@ -3,6 +3,11 @@ node_js:
   - '12'
   - '10'
   - '8'
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+before_install:
+  - npm i npminstall -g
+install:
+  - npminstall
+script:
+  - npm run ci
+after_script:
+  - npminstall codecov && codecov
