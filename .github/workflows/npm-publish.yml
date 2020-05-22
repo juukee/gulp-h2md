@@ -21,6 +21,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm test
+      - id: version
+        run: grep -o '[0-9]*\.[0-9]*\.[0-9]*' -m 1 package.json
+    outputs:
+      version: ${{ steps.version.outputs. }}
+  
 
   # publish-npm:
   #   needs: build
@@ -40,13 +45,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run : echo '::set-output name=version::grep -o '[0-9]*\.[0-9]*\.[0-9]*' -m 1 package.json'
       - uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ version }}
-          release_name: Release ${{ version }}
+          tag_name: ${{ needs.build.outputs.version }}
+          release_name: Release ${{ needs.build.outputs.version }}
           body: |
             Update change
           draft: false
