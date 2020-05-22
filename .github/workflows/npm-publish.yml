@@ -40,9 +40,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - shell:
-          version:
-            run: grep -o '[0-9]*\.[0-9]*\.[0-9]*' -m 1 package.json
       - uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
