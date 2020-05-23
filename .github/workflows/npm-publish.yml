@@ -22,7 +22,7 @@ jobs:
       - run: npm ci
       - run: npm test
       - id: version
-        run: echo '::set-output name=version::grep -o '[0-9]*\.[0-9]*\.[0-9]*' -m 1 package.json'
+        run: echo "::set-output name=version::"grep -o '[0-9]*\.[0-9]*\.[0-9]*' -m 1 package.json""
     outputs:
       version: ${{ steps.version.outputs.version }}
   
