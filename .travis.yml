@@ -3,11 +3,11 @@ node_js:
   - '12'
   - '10'
   - '8'
-before_install:
-  - npm i npminstall -g
-install:
-  - npminstall
-script:
-  - npm run ci
-after_script:
-  - npminstall codecov && codecov
+# before_install:
+#   - npm i npminstall -g
+# install:
+#   - npminstall
+# script:
+#   - npm run ci
+# after_script:
+#   - npminstall codecov && codecov
