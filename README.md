@@ -3,7 +3,7 @@ Gulp plugin for html to md
 ---
 
 [![Build Status](https://travis-ci.org/juukee/gulp-h2md.svg?branch=master)](https://travis-ci.org/juukee/gulp-h2md)
-[![npm](https://img.shields.io/npm/v/gulp-h2md.svg)](https://www.npmjs.com/package/html-to-md)
+[![npm](https://img.shields.io/npm/v/gulp-h2md.svg)](https://www.npmjs.com/package/gulp-h2md)
 [![codecov](https://codecov.io/gh/juukee/gulp-h2md/branch/master/graph/badge.svg)](https://codecov.io/gh/juukee/gulp-h2md)
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/gulp-h2md)
 ![David](https://img.shields.io/david/juukee/gulp-h2md)
